@@ -1,2 +1,0 @@
-name: iyo
-age: 1

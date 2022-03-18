@@ -18,6 +18,8 @@ import codecs
 class MyClient(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.pwd = 'C:/Users/minen/source/iyo_localrepo/iyo'
+        self.ffmpeg_path = 'C:/Windows/System32/ffmpeg.exe'
         self.token='Nzc4MjM4MzAxODAyNzI1NDA4.X7PE5g.hSDuamRf_wKMo0tEavXRQ01DwM0'
         self.MuteRole = 585150174276354055
         self.channel = None
@@ -68,25 +70,13 @@ class MyClient(discord.Client):
             return '{0} Wrong command format, see -!help command'.format(TheMessage.author.mention)
 
     async def GetHelpMessage(self):
+        cmdlist = ['-!set[arg][arg][arg]', '-!play[link]', '-!next', '-!leave', '-!zxc', '-!roll[arg][arg]']
+        filelist = ['set', 'play', 'next', 'leave', 'zxc', 'roll']
         emb=discord.Embed(title="Instruction", color=0x7300ff)
-        with codecs.open ('C:/Users/minen/source/repos/Iyo_bot/help/set.txt', encoding='utf-8') as temp_file:
-            data = temp_file.read()
-            emb.add_field(name = '-!set[arg][arg][arg]', value = data, inline = False)
-        with codecs.open ('C:/Users/minen/source/repos/Iyo_bot/help/play.txt', encoding='utf-8') as temp_file:
-            data = temp_file.read()
-            emb.add_field(name = '-!play[link]', value = data, inline = False)
-        with codecs.open ('C:/Users/minen/source/repos/Iyo_bot/help/next.txt', encoding='utf-8') as temp_file:
-            data = temp_file.read()
-            emb.add_field(name = '-!next', value = data, inline = False)
-        with codecs.open ('C:/Users/minen/source/repos/Iyo_bot/help/leave.txt', encoding='utf-8') as temp_file:
-            data = temp_file.read()
-            emb.add_field(name = '-!leave', value = data, inline = False)
-        with codecs.open ('C:/Users/minen/source/repos/Iyo_bot/help/zxc.txt', encoding='utf-8') as temp_file:
-            data = temp_file.read()
-            emb.add_field(name = '-!zxc', value = data, inline = False)
-        with codecs.open ('C:/Users/minen/source/repos/Iyo_bot/help/roll.txt', encoding='utf-8') as temp_file:
-            data = temp_file.read()
-            emb.add_field(name = '-!roll[arg][arg]', value = data, inline = False)
+        for i in range(len(cmdlist)):
+            with codecs.open ('{0}/help/{1}.txt'.format(self.pwd, filelist[i]), encoding='utf-8') as temp_file:
+                data = temp_file.read()
+                emb.add_field(name = cmdlist[i], value = data, inline = False)
         return emb
 
     async def dota(self, MembersList) -> str:
@@ -112,7 +102,7 @@ class MyClient(discord.Client):
     async def phonk(self, message):
         await message.author.voice.channel.connect(reconnect=True)
         voice = discord.utils.get(self.voice_clients, guild=message.guild)
-        path ="C:/Users/minen/source/repos/Iyo_bot/phonk"
+        path ="{0}/phonk".format(self.pwd)
         filelist = []
         for root, dirs, files in os.walk(path):
            for file in files:
@@ -121,7 +111,7 @@ class MyClient(discord.Client):
         i = 0
         while i < len(filelist):
             if(voice.is_connected()):
-                voice.play(discord.FFmpegPCMAudio(executable="C:/Windows/System32/ffmpeg.exe", source = filelist[i]))
+                voice.play(discord.FFmpegPCMAudio(executable = self.ffmpeg_path, source = filelist[i]))
             i+=1
             while voice.is_playing():
                 await asyncio.sleep(1)
@@ -153,7 +143,7 @@ class MyClient(discord.Client):
         length = len(self.URL_list)
         while length > 0:
             try:
-                voice.play(discord.FFmpegPCMAudio(executable="C:/Windows/System32/ffmpeg.exe", source = self.URL_list[0], **self.FFMPEG_OPTIONS))
+                voice.play(discord.FFmpegPCMAudio(executable = self.ffmpeg_path, source = self.URL_list[0], **self.FFMPEG_OPTIONS))
             except:
                 pass
             while voice.is_playing():
@@ -235,13 +225,19 @@ class MyClient(discord.Client):
                 print('image not found')
         return emb
 
+    def count_lines(self, addres):
+        count = 0
+        with open(addres, 'r') as file:
+            for line in file:
+                count += 1
+        return count
+
     def numerate(self, addres): 
         strings = list()
-        with open(addres, 'r') as file:
+        with open(addres, 'r', encoding='utf-8') as file:
           for line in file:
                strings.append(line.strip())
-        print(strings)
-        with open(addres, 'w') as file:
+        with open(addres, 'w', encoding='utf-8') as file:
             counter = 1
             for line in strings:
                 print('{0} :: {1}'.format(counter, line), file = file)
@@ -251,20 +247,20 @@ class MyClient(discord.Client):
         MatchObject = re.findall(r'[a-z]+', message.content)
         emb=discord.Embed(title=" ", color=0x7300ff)
         flag = False
-        with open('C:/Users/Huawei MateBook D 14/source/repos/iyo_dev/characters/{0}/test.txt'.format(MatchObject[1]), 'r') as file:
+        with open('{0}/characters/{1}/test.txt'.format(self.pwd ,MatchObject[1]), 'r') as file:
             for line in file:
               if(line.strip() == 'false'):
                 flag = True
         for j in range(int(6)):
             files = ['0_char', '1_stats', '2_perks', '3_adv', '4_disadv', '5_inventory']
             modules = ['Character', 'Stats', 'Perks', 'Advantages', 'Disdvantages', 'Inventory']
-            with codecs.open ('C:/Users/Huawei MateBook D 14/source/repos/iyo_dev/characters/{0}/{1}.txt'.format(MatchObject[1], files[j]),  encoding='utf-8') as temp_file:
-                if(flag == True and (j in [1, 2, 5])):
-                    self.numerate('C:/Users/Huawei MateBook D 14/source/repos/iyo_dev/characters/{0}/{1}.txt'.format(MatchObject[1], files[j]))
+            with codecs.open ('{0}/characters/{1}/{2}.txt'.format(self.pwd, MatchObject[1], files[j]), encoding='utf-8') as temp_file:
+                if(flag == True and (j in [2, 5])):
+                    self.numerate('{0}/characters/{1}/{2}.txt'.format(self.pwd, MatchObject[1], files[j]))
                 data = temp_file.read()
                 emb.add_field(name = '{0}'.format(modules[j]), value = data, inline = False)
         if (flag == True):
-            with open('C:/Users/Huawei MateBook D 14/source/repos/iyo_dev/characters/{0}/test.txt'.format(MatchObject[1]), 'w') as file:
+            with open('{0}/characters/{1}/test.txt'.format(self.pwd, MatchObject[1]), 'w') as file:
                 print('true', file = file)
             flag = False
         return emb
@@ -283,9 +279,17 @@ class MyClient(discord.Client):
         else:
             await message.channel.send('{} Wrong category!'.format(message.author.mention))
             return
-        with codecs.open ('C:/Users/Huawei MateBook D 14/source/repos/iyo_dev/characters/{0}/{1}.txt'.format(character_name,character_category),'a' ,  encoding='utf-8') as temp_file:
-            temp_file.write('\n')
-            temp_file.write(character_content)
+        path = '{0}/characters/{1}/{2}.txt'.format(self.pwd, character_name,character_category)
+        count = self.count_lines(path)
+        strings = list()
+        with open(path, 'r', encoding = 'utf-8') as file:
+          for line in file:
+               strings.append(line.strip())
+        strings.append('{} :: {}'.format(count + 1, character_content))
+        with open(path, 'w', encoding = 'utf-8') as file:
+            for line in strings:
+                file.write(line)
+                file.write('\n')
 
     async def on_message(self, message):
         if(message.author.id == self.user.id):
