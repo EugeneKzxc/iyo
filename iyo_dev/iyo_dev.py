@@ -18,7 +18,7 @@ import codecs
 class MyClient(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pwd = 'C:/Users/minen/source/iyo_localrepo/iyo'
+        self.pwd = 'C:/Users/Huawei MateBook D 14/source/iyo_localrepo/iyo'
         self.ffmpeg_path = 'C:/Windows/System32/ffmpeg.exe'
         self.token='Nzc4MjM4MzAxODAyNzI1NDA4.X7PE5g.hSDuamRf_wKMo0tEavXRQ01DwM0'
         self.MuteRole = 585150174276354055
@@ -393,3 +393,4 @@ intents = discord.Intents.default()
 intents.members = True
 client = MyClient(intents=intents)
 client.run(client.token)
+#sdfgtyuiop;lkjhgfd
