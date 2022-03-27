@@ -294,9 +294,13 @@ class MyClient(discord.Client):
     async def on_message(self, message):
         if(message.author.id == self.user.id):
             return
-        if(message.author.top_role.id == self.MuteRole):
-            await message.delete()
-            await message.channel.send('{} Никто вас не слышит.'.format(message.author.mention))
+        try:
+            if(message.author.top_role.id == self.MuteRole):
+                await message.delete()
+                await message.channel.send('{} Никто вас не слышит.'.format(message.author.mention))
+        except:
+             await message.channel.send('ERROR')
+             return
         if(message.content.startswith('-!set')):            
             await message.channel.send(self.OnMessage(message))
         else:
