@@ -397,4 +397,3 @@ intents = discord.Intents.default()
 intents.members = True
 client = MyClient(intents=intents)
 client.run(client.token)
-#test
