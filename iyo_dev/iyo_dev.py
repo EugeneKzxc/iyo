@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import sys
 import discord
 import asyncio
@@ -18,8 +17,8 @@ import codecs
 class MyClient(discord.Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pwd = 'C:/Users/Huawei MateBook D 14/source/iyo_localrepo/iyo'
-        self.ffmpeg_path = 'C:/Windows/System32/ffmpeg.exe'
+        self.pwd = 'C:/Users/minen/source/iyo_localrepo/iyo'
+        self.ffmpeg_path = 'ffmpeg.exe'
         self.token='Nzc4MjM4MzAxODAyNzI1NDA4.X7PE5g.hSDuamRf_wKMo0tEavXRQ01DwM0'
         self.MuteRole = 585150174276354055
         self.channel = None
@@ -80,11 +79,7 @@ class MyClient(discord.Client):
         return emb
 
     async def dota(self, MembersList) -> str:
-        MentionStr = '{0}\n{1}\n{2}\n{3}\n{4}\n'.format(MembersList[0].mention,
-                                                           MembersList[1].mention,
-                                                           MembersList[2].mention,
-                                                           MembersList[3].mention,
-                                                           MembersList[4].mention,)
+        MentionStr = '{0}\n{1}\n{2}\n{3}\n{4}\n'.format(MembersList[0].mention, MembersList[1].mention, MembersList[2].mention, MembersList[3].mention, MembersList[4].mention,)
         return MentionStr
 
     async def on_ready(self):
@@ -309,7 +304,7 @@ class MyClient(discord.Client):
             else:
                 if(message.content.startswith('-!dota')):
                     if(message.author.guild.id == 358724016929767424):
-                        await message.channel.send(self.dota(self.ERIDMembersList))
+                        await message.channel.send(await self.dota(self.ERIDMembersList))
                     else:
                         await message.channel.send('ERROR')
                 else:
@@ -397,4 +392,3 @@ intents = discord.Intents.default()
 intents.members = True
 client = MyClient(intents=intents)
 client.run(client.token)
-#sdfgtyuiop;lkjhgfd
