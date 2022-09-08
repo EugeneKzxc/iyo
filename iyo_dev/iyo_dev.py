@@ -14,17 +14,16 @@ from discord.utils import get
 from random import randint
 import codecs
 
-class MyClient(discord.Client):
+class MyClient(discord.AutoShardedClient):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pwd = 'C:/Users/minen/source/iyo_localrepo/iyo'
+        self.pwd = 'C:/Users/Huawei MateBook D 14/source/iyo_localrepo/iyo'
         self.ffmpeg_path = 'ffmpeg.exe'
         self.token='Nzc4MjM4MzAxODAyNzI1NDA4.X7PE5g.hSDuamRf_wKMo0tEavXRQ01DwM0'
         self.MuteRole = 585150174276354055
         self.channel = None
         self.AllTimers=list()
         self.AllTimersLock = threading.Lock()
-        self.bg_task = self.loop.create_task(self.BackgroundCheckExpire())
         self.ERIDMembersList = list()
         self.CurrentTimerId=0
         self.URL_list = list()
@@ -83,6 +82,7 @@ class MyClient(discord.Client):
         return MentionStr
 
     async def on_ready(self):
+        self.bg_task = self.loop.create_task(self.BackgroundCheckExpire())
         AllChannels=[TheChannel.id for TheChannel in self.get_all_channels() if(type(TheChannel).__name__=='TextChannel')]
         ERIDGuildList = [TheGuild for TheGuild in self.guilds if TheGuild.id==358724016929767424]
         if(len(ERIDGuildList)>0):
@@ -390,5 +390,6 @@ class MyClient(discord.Client):
 
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 client = MyClient(intents=intents)
 client.run(client.token)
